@@ -48,7 +48,7 @@ input[type=checkbox]{width:auto}.ck{display:flex;align-items:center;gap:8px}
 .scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.9rem}
 th{text-align:left;color:var(--mute);font-weight:500}th,td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
 td small{color:var(--mute)}.x{background:none;border:0;color:var(--mute);cursor:pointer;font-size:1.1rem}
-
+ 
 #auth{position:fixed;inset:0;z-index:50;background:rgba(3,5,10,.8);display:none;align-items:center;justify-content:center;padding:20px}
 #auth.on{display:flex}#auth .card{width:100%;max-width:380px;display:grid;gap:12px}
 .hb{display:grid;grid-template-columns:130px 1fr 72px;gap:8px;align-items:center;font-size:.85rem;margin:8px 0}.hb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb b{text-align:right;font-weight:500}
@@ -131,7 +131,7 @@ header{border-bottom:1px solid rgba(255,255,255,.06)}.brand{display:flex;align-i
 <noscript><p style="padding:90px 24px;text-align:center;color:#E9EDF8">Piffsy Journal needs JavaScript. Turn it on and reload the page.</p></noscript>
 <header><a class="brand" href="#"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><g stroke-width="2" stroke-linecap="round"><path d="M6 4v18" stroke="#2EE6C5"/><rect x="3.5" y="9" width="5" height="8" rx="1.5" fill="#2EE6C5"/><path d="M13 3v16" stroke="#FF5C7A"/><rect x="10.5" y="6" width="5" height="9" rx="1.5" fill="#FF5C7A"/><path d="M20 7v17" stroke="#F5C451"/><rect x="17.5" y="11" width="5" height="9" rx="1.5" fill="#F5C451"/></g></svg>Piffsy Journal</a>
 <nav><a href="#journal" data-v="journal">Daily journal</a><a href="#calendar" data-v="calendar">Monthly calendar</a><a href="#reports" data-v="reports">Reports</a></nav><a class="btn ghost sup" id="sup" href="https://www.patreon.com/cw/Piffsy" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">♥</span> Support</a><a id="sync" href="#reports" class="mute" style="font-size:.8rem;text-decoration:none" hidden></a><div id="me"></div></header>
-
+ 
 <section class="view" id="v-home"><div class="hero"><canvas id="gl" aria-hidden="true"></canvas>
 <div class="copy"><h1>Know why you win. Know why you lose.</h1>
 <p>Piffsy Journal is where you log every trade and see the numbers behind it: win rate, profit factor, long against short, and what your mood costs you.</p><div id="cta"></div></div><div class="cue"></div></div>
@@ -141,14 +141,14 @@ header{border-bottom:1px solid rgba(255,255,255,.06)}.brand{display:flex;align-i
 <a href="#reports"><h3>Reports</h3><p>Win rate, profit factor, streaks, reward to risk, and a short write-up of your last session.</p></a></div>
 </section>
 <section class="view" id="v-journal"></section><section class="view" id="v-calendar"></section><section class="view" id="v-reports"></section>
-
+ 
 <canvas id="bg" aria-hidden="true"></canvas><canvas id="fx" aria-hidden="true"></canvas>
 <div id="warn" class="alert" hidden style="position:fixed;left:20px;right:20px;bottom:20px;z-index:60;margin:0">This browser blocked saving, so your entries will disappear when you refresh or close the page.</div>
 <div id="auth" role="dialog" aria-modal="true"><div class="card"><h3 id="a-title"></h3>
 <label id="a-name-l">Name<input id="a-name" autocomplete="name"></label><label>Email<input id="a-email" type="email" autocomplete="email"></label>
 <label>Password<input id="a-pass" type="password" autocomplete="current-password"></label><p id="a-hint" class="mute" style="font-size:.85rem"></p><p id="a-msg" class="dn"></p><p class="mute" style="font-size:.8rem">Your account and journal stay in this browser. There is no server and no password reset, so keep your password safe.</p>
 <button class="btn" id="a-go" data-a="go"></button><button class="btn ghost" id="a-sw" data-a="sw"></button><button class="btn ghost" data-a="rstauth">Restore from a backup file</button><input type="file" id="rst2" accept=".json,application/json" hidden><button class="x" data-a="close">Close</button></div></div>
-
+ 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=s=>document.querySelector(s),sum=a=>Math.round(a.reduce((s,x)=>s+x.pnl,0)*1e6)/1e6,esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -170,7 +170,7 @@ const keep=()=>{try{navigator.storage&&navigator.storage.persist&&navigator.stor
 function backup(){const u=(LS('pf:users')||{})[U.email]||{},a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({app:'piffsy-journal',v:2,exported:new Date().toISOString(),account:{email:U.email,name:U.name,salt:u.salt,h:u.h},data:D})],{type:'application/json'}));a.download='piffsy-backup-'+today()+'.json';a.click();D.bk=Date.now();save();stat();if(location.hash=='#reports'){render.reports();$('#bmsg').textContent='Backup downloaded.'}}
 function readBackup(f,cb){const fr=new FileReader();fr.onload=()=>{try{const o=JSON.parse(fr.result);if(o.app!='piffsy-journal'||!o.data||!Array.isArray(o.data.trades))throw 0;o.data=clean(o.data);cb(o)}catch(e){cb(null)}};fr.readAsText(f)}
 const mg=(T,d)=>{const ids=new Set(T.trades.map(x=>x.id));let n=0;d.trades.forEach(x=>{if(!ids.has(x.id)){T.trades.push(x);n++}});['refl','plan'].forEach(k=>Object.keys(d[k]||{}).forEach(x=>{if(!T[k][x])T[k][x]=d[k][x]}));T.goals=Object.assign({},d.goals,T.goals);T.set=T.set&&T.set.a?T.set:(d.set||{});return n};
-
+ 
 function stats(t){const w=t.filter(x=>x.pnl>0),l=t.filter(x=>x.pnl<0),n=t.length,gw=sum(w),gl=-sum(l),aw=w.length?gw/w.length:0,al=l.length?gl/l.length:0,wr=n?w.length/n:0,L=t.filter(x=>x.side=='Long'),S=t.filter(x=>x.side=='Short');
 return{n,net:sum(t),wr,aw,al,pf:gl?gw/gl:gw?Infinity:0,rr:al?aw/al:0,ex:wr*aw-(1-wr)*al,L:L.length,S:S.length,lw:L.length?L.filter(x=>x.pnl>0).length/L.length:0,sw:S.length?S.filter(x=>x.pnl>0).length/S.length:0,plan:n?t.filter(x=>x.plan).length/n:0,lots:t.reduce((s,x)=>s+x.lot,0)}}
 /* ===== trader tools: R multiples, streak, insights, calculator, CSV ===== */
@@ -206,7 +206,7 @@ if(ok)save();render.reports();$('#imsg').textContent='Imported '+ok+' trade'+(ok
 const kpi=(l,v,n)=>`<div class="kpi"><small>${l}</small><b class="${n>0?'up':n<0?'dn':''}">${v}</b></div>`;
 const tbl=(h,rows)=>`<div class="scroll"><table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
 const col=n=>`<span class="${n>=0?'up':'dn'}">${fm(n)}</span>`;
-
+ 
 /* auth (local only) */
 async function hs(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent(s)))}}
 function authUI(m,msg){mode=m;$('#auth').classList.add('on');$('#a-title').textContent=m=='login'?'Log in to Piffsy':'Create your journal';$('#a-name-l').style.display=m=='login'?'none':'';$('#a-go').textContent=m=='login'?'Log in':'Sign up';$('#a-sw').textContent=m=='login'?'New here? Sign up':'Have an account? Log in';$('#a-msg').textContent=msg||'';$('#a-hint').textContent='';$('#a-pass').autocomplete=m=='login'?'current-password':'new-password';$(m=='login'?'#a-email':'#a-name').focus()}
@@ -218,7 +218,7 @@ const sl=b2h(crypto.getRandomValues(new Uint8Array(16)));
 if(mode=='signup'){if(us[e])return bad('That email already has an account. Log in instead.');us[e]={name:n||e.split('@')[0],salt:sl,h:await hashPw(p,sl)};if(!SS('pf:users',us))return bad('This browser blocked saving, so the account could not be created.')}
 else{const u=us[e];let ok=false;if(u){if(u.salt)ok=await hashPw(p,u.salt)===u.h;else if(await hs(e+p)===u.h){ok=true;u.salt=sl;u.h=await hashPw(p,sl);SS('pf:users',us)}}if(!ok)return bad('Email or password is incorrect.')}
 U={email:e,name:us[e].name};SS('pf:me',U);D=Store.load(e);prevNet=prevMo=0;sel=today();$('#auth').classList.remove('on');$('#a-pass').value='';nav();keep()}
-
+ 
 /* router */
 function nav(){const r=location.hash.slice(1);let v=['journal','calendar','reports'].includes(r)?r:'home';
 if(v!='home'&&!U){v='home';authUI('signup','Create a free account to open the '+r+'.')}
@@ -229,7 +229,7 @@ $('#cta').innerHTML=U?`<a class="btn" href="#journal">Open your journal</a>`:`<b
 window.heroOn=v=='home';document.body.classList.toggle('in',v!='home');$('#sup').hidden=v=='home';$('#sync').hidden=v=='home'||!U;if(U)stat();window.scrollTo(0,0);['journal','calendar','reports'].forEach(k=>{if(k!=v)$('#v-'+k).innerHTML=''});
 if(render[v])try{render[v]()}catch(e){console.error(e);$('#v-'+v).innerHTML='<div class="wrap"><div class="alert">Something went wrong drawing this page. Reload and try again.</div></div>'}
 const w=$('#v-'+v+' .wrap');if(w)w.classList.add('fresh');if(v=='home')dispatchEvent(new Event('resize'))}
-
+ 
 /* daily journal */
 let lastId=0,prevNet=0,prevMo=0;
 const CLS=['Forex','Stock','Index','Bond','Commodity','Crypto','Futures','Options','Other'];
@@ -267,7 +267,7 @@ function addTrade(){const g=i=>$('#f-'+i),p=parseFloat(g('pnl').value),l=parseFl
 if(l<0){g('err').textContent='Lot size cannot be negative.';return}
 if(!g('sym').value.trim()||isNaN(p)){g('err').textContent='Add an instrument and the P&L (use a minus sign for a loss).';return}
 D.trades.push({id:lastId=Date.now(),date:sel,sym:g('sym').value.trim().toUpperCase(),side:$('#f-side .on').textContent,lot:isNaN(l)?0:l,en:g('en').value,ex:g('ex').value,pnl:p,emo:($('#f-emo .on')||{}).textContent||'Calm',ses:g('ses').value.replace('Not set',''),cls:g('cls').value,sl:g('sl').value,setup:g('setup').value.trim(),plan:g('plan').checked,note:g('note').value.trim()});save();if(p>0){const r=$('.go').getBoundingClientRect();fx(r.left+r.width/2,r.top)}render.journal()}
-
+ 
 /* monthly calendar */
 render.calendar=()=>{const[y,m]=cm.split('-').map(Number),f=new Date(y,m-1,1),dim=new Date(y,m,0).getDate(),off=(f.getDay()+6)%7,tr=D.trades.filter(x=>x.date.startsWith(cm)).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.id-b.id),s=stats(tr),by=grp(tr,x=>x.date),dn=Object.keys(by).sort().map(k=>[k,sum(by[k])]),mxa=Math.max(1e-9,...dn.map(x=>Math.abs(x[1]))),dv=dn.map(x=>x[1]),mood=s.net>0?'pos':s.net<0?'neg':'zero',bd=dn.length?dn.reduce((a,b)=>b[1]>a[1]?b:a):null,wo=dn.length?dn.reduce((a,b)=>b[1]<a[1]?b:a):null,cells=[...Array(off).fill(0)],wrows=[],goal=(D.goals||{})[cm]||0;
 for(let d=1;d<=dim;d++)cells.push(d);while(cells.length%7)cells.push(0);
@@ -280,7 +280,7 @@ $('#v-calendar').innerHTML=`<div class="wrap"><div class="mast ${mood}">${eqLine
 <div class="rail">${rl('Trades',s.n)}${rl('Win rate',pct(s.wr),`<div class="tr"><i class="u" style="width:${s.wr*100}%"></i></div>`)}${rl('Profit days',dv.filter(x=>x>0).length)}${rl('Loss days',dv.filter(x=>x<0).length)}${rl('Best day',xp(bd&&bd[1]))}${rl('Worst day',xp(wo&&wo[1]))}${rl('Average per day',dn.length?xp(sum(tr)/dn.length):'–')}${rl('Journal streak',strk())}</div></div>
 <div class="calw"><div class="card"><div class="cal">${c}</div></div><aside class="side"><div class="card"><h3>Monthly goal</h3><div class="goal"><input id="g-v" type="number" min="0" step="any" placeholder="Profit target" value="${goal||''}"><button class="btn" data-a="goal">Set</button></div>${goal?`<div class="hb"><span>${pct(Math.max(0,s.net)/goal)}</span><div class="tr"><i class="u" style="width:${Math.min(100,Math.max(0,s.net)/goal*100)}%"></i></div><b>${r2(goal)}</b></div><p class="mute">${s.net>=goal?'Target hit.':r2(goal-s.net)+' to go.'}</p>`:'<p class="mute">Set a profit target for the month and track it here.</p>'}</div><div class="card"><h3>Week by week</h3>${hb(wrows)}</div><div class="card"><h3>Daily P&amp;L</h3>${vb(dn.map(x=>[x[0].slice(8),x[1]]))}</div><div class="card"><h3>P&amp;L by emotion (win rate)</h3>${hb(gs(tr,x=>x.emo,(k,q)=>`${k} (${pct(stats(q).wr)})`))}</div></aside></div></div>`;
 cu($('#big'),prevMo,s.net);prevMo=s.net};
-
+ 
 /* reports */
 function eq(t){if(t.length<2)return'<p class="mute">Add at least two trades to draw your equity curve.</p>';let c=0;const v=t.map(x=>c+=x.pnl),mn=Math.min(0,...v),mx=Math.max(0,...v),sp=mx-mn||1,z=150-(0-mn)/sp*140,pts=v.map((y,i)=>`${(i/(v.length-1)*600).toFixed(1)},${(150-(y-mn)/sp*140).toFixed(1)}`).join(' ');
 return`<svg viewBox="0 0 600 160" width="100%" role="img" aria-label="Equity curve"><line x1="0" x2="600" y1="${z}" y2="${z}" stroke="#222A47" stroke-dasharray="4"/><polygon points='0,${z} ${pts} 600,${z}' fill='rgba(46,230,197,.12)'/><polyline points='${pts}' fill='none' stroke='#2EE6C5' stroke-width='2.5' stroke-linejoin='round'/><text x='4' y='12' fill='#8F98B8' font-size='11'>${fm(mx)}</text><text x='4' y='158' fill='#8F98B8' font-size='11'>${fm(mn)}</text></svg>`}
@@ -310,7 +310,7 @@ $('#v-reports').innerHTML=`<div class="wrap"><div class="bar"><h2>Reports</h2><d
 <div class="card" style="margin-top:16px"><div class="ch"><h3>All trades</h3><input id="hq" placeholder="Filter by instrument, setup, emotion or date"><div class="sv"><span id="imsg" class="up"></span><button class="btn ghost" data-a="imp">Import CSV</button><button class="btn ghost" data-a="csv">Export CSV</button><input type="file" id="imp" accept=".csv,text/csv" hidden></div></div><div id="hist">${hist('')}</div></div>
 <div class="card" style="margin-top:16px"><div class="ch"><h3>Your data</h3><div class="sv"><span id="bmsg" class="up"></span><button class="btn ghost" data-a="rst">Restore backup</button><button class="btn" data-a="bak">Download backup</button><input type="file" id="rst" accept=".json,application/json" hidden></div></div><p class="mute">Everything you log stays in this browser. Nothing is sent to a server, so clearing your browser data wipes it. Download a backup now and then and keep the file somewhere safe. You can restore it on any device.</p><p class="mute" style="margin:8px 0 14px">Last backup: ${D.bk?new Date(D.bk).toLocaleDateString():'never'}</p><button class="btn ghost danger" data-a="wipe">Delete all my data</button></div></div>`;
 $('#hq').oninput=e=>{$('#hist').innerHTML=hist(e.target.value)};$('#imp').onchange=importCsv;$('#rst').onchange=e=>{const f=e.target.files[0];if(f)readBackup(f,o=>{const n=o?mg(D,o.data):-1;if(n>0)save();render.reports();$('#bmsg').textContent=n<0?'That is not a Piffsy backup.':'Restored '+n+' trade'+(n==1?'':'s')+'.'})}};
-
+ 
 /* events */
 document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a,n=+t.dataset.n;
 if(a=='login'||a=='signup')authUI(a);else if(a=='sw')authUI(mode=='login'?'signup':'login');else if(a=='close')closeAuth();else if(a=='go')authGo();
@@ -326,7 +326,7 @@ $('#auth').addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.tagName=='
 addEventListener('hashchange',nav);
 addEventListener('storage',e=>{if(!U)return;if(e.key===null||(e.key=='pf:me'&&!e.newValue)){U=null;D={trades:[],refl:{},plan:{},goals:{},set:{}};location.hash='';nav();return}
 if(e.key=='pf:d:'+U.email&&e.newValue){D=Store.load(U.email);const r=location.hash.slice(1);if(render[r])render[r]();stat()}});
-
+ 
 /* 3D data-flow hero */
 (function(){try{const cv=$('#gl'),R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true}),S=new THREE.Scene(),C=new THREE.PerspectiveCamera(55,1,.1,200),calm=matchMedia('(prefers-reduced-motion:reduce)').matches,dpr=Math.min(devicePixelRatio,2),T={value:0};
 const vs=`uniform float T,P;attribute float e;varying float h,f;
@@ -364,3 +364,4 @@ $('#rst2').onchange=e=>{const f=e.target.files[0];if(!f)return;readBackup(f,o=>{
 const hd=$('header'),setH=()=>document.documentElement.style.setProperty('--hh',hd.offsetHeight+'px');setH();if(window.ResizeObserver)new ResizeObserver(setH).observe(hd);addEventListener('resize',setH);
 nav();keep();
 </script></body></html>
+ 
